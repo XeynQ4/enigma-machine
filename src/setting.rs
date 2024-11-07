@@ -8,6 +8,9 @@ pub struct Setting {
     pub rotor1_position: char,
     pub rotor2_position: char,
     pub rotor3_position: char,
+    pub ring_setting1: char,
+    pub ring_setting2: char,
+    pub ring_setting3: char,
     pub reflector: Reflector,
 }
 
@@ -20,6 +23,9 @@ impl Setting {
         rotor1_position: char,
         rotor2_position: char,
         rotor3_position: char,
+        ring_setting1: char,
+        ring_setting2: char,
+        ring_setting3: char,
         reflector: Reflector,
     ) -> Self {
         Self {
@@ -30,6 +36,9 @@ impl Setting {
             rotor1_position,
             rotor2_position,
             rotor3_position,
+            ring_setting1,
+            ring_setting2,
+            ring_setting3,
             reflector,
         }
     }
@@ -43,6 +52,9 @@ impl Setting {
         rotor1_position: char,
         rotor2_position: char,
         rotor3_position: char,
+        ring_setting1: char,
+        ring_setting2: char,
+        ring_setting3: char,
         reflector: Reflector,
     ) {
         self.plugboard = plugboard.clone();
@@ -52,6 +64,9 @@ impl Setting {
         self.rotor1_position = rotor1_position;
         self.rotor2_position = rotor2_position;
         self.rotor3_position = rotor3_position;
+        self.ring_setting1 = ring_setting1;
+        self.ring_setting2 = ring_setting2;
+        self.ring_setting3 = ring_setting3;
         self.reflector = reflector;
     }
 
@@ -62,54 +77,37 @@ impl Setting {
             if self.rotor2_position == self.rotor2.turnover {
                 self.rotor1_position = (((self.rotor1_position as u8 - 65 + 1) % 26) + 65) as char;
             }
-        } else if self.rotor3_position
-            == (((self.rotor3.turnover as u8 - 65 + 1) % 26) + 65) as char
+        } else if self.rotor2_position
+            == (((self.rotor2.turnover as u8 - 65 + 26 - 1) % 26) + 65) as char
         {
-            if self.rotor2_position
-                == (((self.rotor2.turnover as u8 - 65 + 26 - 1) % 26) + 65) as char
-            {
-                self.rotor2_position = self.rotor2.turnover;
-                self.rotor1_position = (((self.rotor1_position as u8 - 65 + 1) % 26) + 65) as char;
-            }
+            self.rotor2_position = self.rotor2.turnover;
+            self.rotor1_position = (((self.rotor1_position as u8 - 65 + 1) % 26) + 65) as char;
         }
     }
 
     pub fn run(&mut self, letter: char) -> char {
-        println!("\nKeyboard Input: {}", letter);
         self.move_rotors();
 
-        println!(
-            "Rotor Positions: {}{}{}",
-            self.rotor1_position, self.rotor2_position, self.rotor3_position
-        );
-
         let mut letter = self.plugboard.run(letter);
-        println!("Plugboard Output: {}", letter);
-
-        letter = self.rotor3.run_right_left(letter, self.rotor3_position);
-        println!("Rotor 3 Output: {}", letter);
-
-        letter = self.rotor2.run_right_left(letter, self.rotor2_position);
-        println!("Rotor 2 Output: {}", letter);
-
-        letter = self.rotor1.run_right_left(letter, self.rotor1_position);
-        println!("Rotor 1 Output: {}", letter);
-
+        letter = self
+            .rotor3
+            .run_right_left(letter, self.rotor3_position, self.ring_setting3);
+        letter = self
+            .rotor2
+            .run_right_left(letter, self.rotor2_position, self.ring_setting2);
+        letter = self
+            .rotor1
+            .run_right_left(letter, self.rotor1_position, self.ring_setting1);
         letter = self.reflector.run(letter);
-        println!("Reflector Output: {}", letter);
-
-        letter = self.rotor1.run_left_right(letter, self.rotor1_position);
-        println!("Rotor 1 Output: {}", letter);
-
-        letter = self.rotor2.run_left_right(letter, self.rotor2_position);
-        println!("Rotor 2 Output: {}", letter);
-
-        letter = self.rotor3.run_left_right(letter, self.rotor3_position);
-        println!("Rotor 3 Output: {}", letter);
-
-        letter = self.plugboard.run(letter);
-        println!("Plugboard Output: {}", letter);
-
-        letter
+        letter = self
+            .rotor1
+            .run_left_right(letter, self.rotor1_position, self.ring_setting1);
+        letter = self
+            .rotor2
+            .run_left_right(letter, self.rotor2_position, self.ring_setting2);
+        letter = self
+            .rotor3
+            .run_left_right(letter, self.rotor3_position, self.ring_setting3);
+        self.plugboard.run(letter)
     }
 }

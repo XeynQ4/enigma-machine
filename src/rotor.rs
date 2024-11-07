@@ -5,15 +5,16 @@ pub struct Rotor {
 }
 
 impl Rotor {
-    pub fn run_right_left(&self, letter: char, position: char) -> char {
-        let letter = (letter as u8 - 65 + position as u8 - 65) % 26;
-        (((self.wiring[letter as usize] as u8 + 26 - position as u8) % 26) + 65) as char
+    pub fn run_right_left(&self, letter: char, position: char, ring: char) -> char {
+        let letter = (letter as u8 + position as u8 - ring as u8 + 26 - 65) % 26;
+        (((self.wiring[letter as usize] as u8 + 26 - position as u8 + ring as u8 - 65) % 26) + 65)
+            as char
     }
 
-    pub fn run_left_right(&self, letter: char, position: char) -> char {
-        let letter = (((letter as u8 - 65 + position as u8 - 65) % 26) + 65) as char;
-        (((self.wiring.iter().position(|&x| x == letter).unwrap() as u8 + 26
-            - (position as u8 - 65))
+    pub fn run_left_right(&self, letter: char, position: char, ring: char) -> char {
+        let letter = (((letter as u8 - 65 + position as u8 + 26 - ring as u8) % 26) + 65) as char;
+        (((self.wiring.iter().position(|&x| x == letter).unwrap() as u8 + 26 + ring as u8
+            - position as u8)
             % 26)
             + 65) as char
     }

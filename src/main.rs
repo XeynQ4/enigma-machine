@@ -10,25 +10,12 @@ fn main() {
         .expect("Failed to read line");
 
     let plugboard = enigma_machine::Plugboard::new(&vec![
-        // ('A', 'L'),
-        // ('P', 'R'),
-        // ('T', 'D'),
-        // ('B', 'W'),
-        // ('K', 'F'),
-        // ('O', 'Y'),
-        // ('A', 'B'),
-        // ('C', 'D'),
-        // ('E', 'F'),
-        // ('G', 'H'),
-        // ('I', 'J'),
-        // ('K', 'L'),
-        // ('M', 'N'),
-        // ('O', 'P'),
-        // ('Q', 'R'),
-        // ('S', 'T'),
-        // ('U', 'V'),
-        // ('W', 'X'),
-        // ('Y', 'Z'),
+        ('A', 'L'),
+        ('P', 'R'),
+        ('T', 'D'),
+        ('B', 'W'),
+        ('K', 'F'),
+        ('O', 'Y'),
     ]);
 
     let mut setting = Setting::new(
@@ -36,18 +23,15 @@ fn main() {
         enigma_machine::rotor::I,
         enigma_machine::rotor::II,
         enigma_machine::rotor::III,
-        'P',
+        'A',
+        'G',
+        'F',
+        'A',
+        'B',
         'D',
-        'T',
         enigma_machine::reflector::UKW_B,
     );
 
-    // let letter = enigma_machine::run_letter('A', &setting);
-    // println!("Letter after plugboard: {letter}");
-
     message = enigma_machine::run_message(&message, &mut setting);
     println!("Output: {message}");
-
-    // message = enigma_machine::run_message(&message, &mut setting);
-    // println!("Encoded message: {message}");
 }
