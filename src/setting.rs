@@ -1,20 +1,33 @@
 use crate::{Plugboard, Reflector, Rotor};
 
+/// A struct representing the settings of an Enigma machine.
 pub struct Setting {
+    /// The plugboard configuration used, represented as the `Plugboard` struct.
     pub plugboard: Plugboard,
+    /// The rotor in the leftmost slot, represented as the `Rotor` struct.
     pub rotor1: Rotor,
+    /// The rotor in the middle slot, represented as the `Rotor` struct.
     pub rotor2: Rotor,
+    /// The rotor in the rightmost slot, represented as the `Rotor` struct.
     pub rotor3: Rotor,
+    /// The current position of the leftmost rotor.
     pub rotor1_position: char,
+    /// The current position of the middle rotor.
     pub rotor2_position: char,
+    /// The current position of the rightmost rotor.
     pub rotor3_position: char,
+    /// The ring setting of the leftmost rotor.
     pub ring_setting1: char,
+    /// The ring setting of the middle rotor.
     pub ring_setting2: char,
+    /// The ring setting of the rightmost rotor.
     pub ring_setting3: char,
+    /// The reflector used, represented as the `Reflector` struct.
     pub reflector: Reflector,
 }
 
 impl Setting {
+    /// Creates a new `Setting` struct with the given parameters.
     pub fn new(
         plugboard: &Plugboard,
         rotor1: Rotor,
@@ -43,6 +56,7 @@ impl Setting {
         }
     }
 
+    /// Sets the parameters of the `Setting` struct to the given values.
     pub fn set(
         &mut self,
         plugboard: &Plugboard,
@@ -85,6 +99,7 @@ impl Setting {
         }
     }
 
+    /// Runs the given letter through the Enigma machine.
     pub fn run(&mut self, letter: char) -> char {
         self.move_rotors();
 

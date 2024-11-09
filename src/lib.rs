@@ -1,5 +1,9 @@
+//! A simple implementation of the Enigma machine.
+#![warn(missing_docs)]
 mod plugboard;
+/// A module containing the reflectors used in real Enigma and the struct representing them.
 pub mod reflector;
+/// A module containing the rotors used in real Enigma and the struct representing them.
 pub mod rotor;
 mod setting;
 pub use plugboard::Plugboard;
@@ -7,6 +11,7 @@ pub use reflector::Reflector;
 pub use rotor::Rotor;
 pub use setting::Setting;
 
+/// Runs the given message through the Enigma machine using the settings provided.
 pub fn run_message(message: &str, setting: &mut Setting) -> String {
     let mut message = message.to_string();
     message = clean_up_message(&message);
@@ -22,6 +27,7 @@ fn run_letter_without_cleanup(letter: char, setting: &mut Setting) -> char {
     setting.run(letter)
 }
 
+/// Runs the given letter through the Enigma machine using the settings provided.
 pub fn run_letter(letter: char, setting: &mut Setting) -> char {
     run_letter_without_cleanup(clean_up_letter(letter), setting)
 }
